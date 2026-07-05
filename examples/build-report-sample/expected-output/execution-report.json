@@ -1,0 +1,185 @@
+{
+  "pipeline_version": "1.0.0",
+  "generated_at": "2026-07-05T22:21:27.428285+00:00",
+  "build_status": "PASS",
+  "missing_stages": [],
+  "skills": [
+    {
+      "stage": "structure",
+      "skill": "presentation-structure",
+      "version": "1.0.0"
+    },
+    {
+      "stage": "design",
+      "skill": "presentation-design",
+      "version": "1.0.0"
+    },
+    {
+      "stage": "copywriting",
+      "skill": "presentation-copywriting",
+      "version": "1.0.0"
+    },
+    {
+      "stage": "diagram",
+      "skill": "diagram-design",
+      "version": "1.0.0"
+    },
+    {
+      "stage": "render",
+      "skill": "deck-html-renderer",
+      "version": "2.3.1"
+    },
+    {
+      "stage": "qa",
+      "skill": "presentation-qa",
+      "version": "1.0.0"
+    }
+  ],
+  "stage_telemetry": [
+    {
+      "stage": "structure",
+      "skill": "presentation-structure",
+      "version": "1.0.0",
+      "tokens": 48210,
+      "duration_ms": 182400
+    },
+    {
+      "stage": "design",
+      "skill": "presentation-design",
+      "version": "1.0.0",
+      "tokens": 61930,
+      "duration_ms": 240800
+    },
+    {
+      "stage": "copywriting",
+      "skill": "presentation-copywriting",
+      "version": "1.0.0",
+      "tokens": 39450,
+      "duration_ms": 151200
+    },
+    {
+      "stage": "diagram",
+      "skill": "diagram-design",
+      "version": "1.0.0",
+      "tokens": 27780,
+      "duration_ms": 98600
+    },
+    {
+      "stage": "render",
+      "skill": "deck-html-renderer",
+      "version": "2.3.1",
+      "tokens": 8120,
+      "duration_ms": 45300
+    },
+    {
+      "stage": "qa",
+      "skill": "presentation-qa",
+      "version": "1.0.0",
+      "tokens": 52640,
+      "duration_ms": 205100
+    }
+  ],
+  "totals": {
+    "tokens": 238130,
+    "duration_ms": 923400,
+    "duration_s": 923.4,
+    "inline_stages": []
+  },
+  "counts": {
+    "slides": 12,
+    "diagrams": 3,
+    "screenshots_used": 4,
+    "screenshots_discarded": 1
+  },
+  "source_coverage": {
+    "discovered": 6,
+    "consumed": 6,
+    "ratio": 1.0,
+    "unconsumed": []
+  },
+  "qa": {
+    "verdict": "SHIP",
+    "auto_fixes": 2,
+    "remaining_findings": {
+      "blockers": 0,
+      "majors": 0,
+      "minors": 0,
+      "list": []
+    }
+  },
+  "confidence": {
+    "by_stage": {
+      "structure": {
+        "score": 100,
+        "band": "High"
+      },
+      "design": {
+        "score": 100,
+        "band": "High"
+      },
+      "copywriting": {
+        "score": 100,
+        "band": "High"
+      },
+      "diagram": {
+        "score": 100,
+        "band": "High"
+      },
+      "qa": {
+        "score": 94,
+        "band": "High"
+      }
+    },
+    "weighted_overall": {
+      "score": 98.5,
+      "band": "High"
+    },
+    "weakest_stage": {
+      "stage": "qa",
+      "score": 94,
+      "band": "High"
+    }
+  },
+  "needs_verification": [
+    "none reported"
+  ],
+  "assumptions": [
+    "none reported"
+  ],
+  "conflicts": [
+    "none reported"
+  ],
+  "skipped_by_design": [
+    {
+      "item": "\"Office relocation update\" slide",
+      "reason": "fails elevator test — does not support the quarter narrative (\"growth reaccelerated on efficient spend\")",
+      "stage": "structure"
+    },
+    {
+      "item": "add gradient background to section dividers",
+      "reason": "rejected — no objective quality increase over flat token background",
+      "stage": "design"
+    },
+    {
+      "item": "admin settings screen screenshot",
+      "reason": "captured but discarded — redundant with slide 5 dashboard crop",
+      "stage": "design"
+    },
+    {
+      "item": "\"support ticket categories\" diagram candidate (slide 7)",
+      "reason": "demoted — kept as list: no relation cues between items; a diagram would fabricate structure",
+      "stage": "diagram"
+    }
+  ],
+  "rendering_warnings": [
+    "none reported"
+  ],
+  "recommendations": [
+    {
+      "priority": 1,
+      "target": "none",
+      "action": "Build is clean — no high-impact improvements identified.",
+      "payoff": "—"
+    }
+  ]
+}

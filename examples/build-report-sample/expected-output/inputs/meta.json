@@ -1,0 +1,4 @@
+{
+  "render_errored": false,
+  "expected_stages": ["structure", "design", "copywriting", "diagram", "render", "qa"]
+}

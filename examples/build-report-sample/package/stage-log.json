@@ -1,0 +1,8 @@
+[
+  {"stage": "structure", "skill": "presentation-structure", "version": "1.0.0", "tokens": 48210, "duration_ms": 182400},
+  {"stage": "design", "skill": "presentation-design", "version": "1.0.0", "tokens": 61930, "duration_ms": 240800},
+  {"stage": "copywriting", "skill": "presentation-copywriting", "version": "1.0.0", "tokens": 39450, "duration_ms": 151200},
+  {"stage": "diagram", "skill": "diagram-design", "version": "1.0.0", "tokens": 27780, "duration_ms": 98600},
+  {"stage": "render", "skill": "deck-html-renderer", "version": "2.3.1", "tokens": 8120, "duration_ms": 45300},
+  {"stage": "qa", "skill": "presentation-qa", "version": "1.0.0", "tokens": 52640, "duration_ms": 205100}
+]

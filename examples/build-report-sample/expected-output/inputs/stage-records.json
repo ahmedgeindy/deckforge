@@ -1,0 +1,59 @@
+[
+  {
+    "stage": "structure",
+    "skill": "presentation-structure",
+    "version": "1.0.0",
+    "counts": { "slides": 12 },
+    "sources": { "discovered": 6, "consumed": 6, "unconsumed": [] },
+    "skipped_by_design": [
+      {
+        "item": "\"Office relocation update\" slide",
+        "reason": "fails elevator test — does not support the quarter narrative (\"growth reaccelerated on efficient spend\")"
+      }
+    ]
+  },
+  {
+    "stage": "design",
+    "skill": "presentation-design",
+    "version": "1.0.0",
+    "counts": { "screenshots_used": 4, "screenshots_discarded": 1 },
+    "skipped_by_design": [
+      {
+        "item": "add gradient background to section dividers",
+        "reason": "rejected — no objective quality increase over flat token background"
+      },
+      {
+        "item": "admin settings screen screenshot",
+        "reason": "captured but discarded — redundant with slide 5 dashboard crop"
+      }
+    ]
+  },
+  {
+    "stage": "copywriting",
+    "skill": "presentation-copywriting",
+    "version": "1.0.0"
+  },
+  {
+    "stage": "diagram",
+    "skill": "diagram-design",
+    "version": "1.0.0",
+    "counts": { "diagrams": 3 },
+    "skipped_by_design": [
+      {
+        "item": "\"support ticket categories\" diagram candidate (slide 7)",
+        "reason": "demoted — kept as list: no relation cues between items; a diagram would fabricate structure"
+      }
+    ]
+  },
+  {
+    "stage": "render",
+    "skill": "deck-html-renderer",
+    "version": "2.3.1"
+  },
+  {
+    "stage": "qa",
+    "skill": "presentation-qa",
+    "version": "1.0.0",
+    "minors": 2
+  }
+]

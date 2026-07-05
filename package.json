@@ -33,7 +33,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test",
     "test:python": "pytest skills/presentation-build-report/scripts -q"
   },
   "repository": {

@@ -91,9 +91,13 @@ export async function run(args, ctx = defaultContext()) {
     if (values['dry-run']) {
       ctx.stdout(`${id} (${values.scope}) — would install ${skills.length} skill(s) to ${result.targetRoot}:\n`);
       for (const f of result.files) ctx.stdout(`  + ${f}\n`);
+      for (const f of result.orphansRemoved ?? []) ctx.stdout(`  - ${f} (orphaned; would remove)\n`);
       if (result.agentsMdPath) ctx.stdout(`  ~ ${result.agentsMdPath} (managed block)\n`);
     } else {
       ctx.stdout(`${glyph('ok')} ${id} (${values.scope}): installed ${skills.length} skill(s) to ${result.targetRoot}\n`);
+      if (result.orphansRemoved?.length > 0) {
+        ctx.stdout(`  removed ${result.orphansRemoved.length} orphaned file(s): ${result.orphansRemoved.join(', ')}\n`);
+      }
       if (result.agentsMdPath) ctx.stdout(`  updated managed block in ${result.agentsMdPath}\n`);
     }
   }

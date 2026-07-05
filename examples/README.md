@@ -13,7 +13,7 @@ is pre-rendered — you drive it yourself with your own agent.
 
 ## `build-report-sample/`
 
-**For: understanding what the stage-6 build log actually looks like before you run anything.** A
+**For: understanding what the stage-7 build log actually looks like before you run anything.** A
 frozen, already-finished example: a fictional clean pipeline run (`package/`) and the real
 `execution-report.md` / `.json` (`expected-output/`) that `scripts/build_report.py` produced from
 it — copied verbatim from an actual run, with exact regeneration commands included. Look here if

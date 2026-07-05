@@ -1,6 +1,6 @@
-# DeckForge v1.0.0 — Release Specification
+# DeckForge v1.0.0 — Architecture & Design Decisions
 
-**Status:** Release-candidate preparation. DO NOT PUBLISH — human review gates GitHub push and npm publish.
+**Status:** Shipped design for v1.0.0. Records the locked decisions behind the repository layout, CLI surface, and adapter design.
 **Date:** 2026-07-06
 
 ## 1. What DeckForge is
@@ -13,7 +13,7 @@ Pipeline: `structure → design → copywriting → diagram → render → qa �
 |---|---|---|
 | 1 | presentation-structure | Narrative outline: story frameworks, QA gates, kill-filter, fact bank |
 | 2 | presentation-design | Visual system: design tokens, 11 slide archetypes, AI-tell avoidance |
-| 3 | presentation-copywriting | Slide copy: title craft, registers, 18-check fact-fidelity gate |
+| 3 | presentation-copywriting | Slide copy: title craft, registers, six-step fact-fidelity gate + 18 copy-quality checks |
 | 4 | diagram-design | Diagrams: escalation ladder (prose→list→table→diagram), spec contract |
 | 5 | presentation-qa | Final gate: check catalog, consistency sweeps, SHIP/BLOCKED verdict |
 | 6 | presentation-build-report | Internal build log: confidence rubric, telemetry, PASS/FAILED status (Python aggregator) |
@@ -102,25 +102,15 @@ README.md is the front door: what/why (2 paragraphs + pipeline diagram), 60-seco
 ## 7. Examples
 
 - `examples/quickstart/`: `brief.md` (realistic product-review brief), `sources/` (2 small fake source docs), `WALKTHROUGH.md` (install → prompt → stage-by-stage expectations → how to read the execution report).
-- `examples/build-report-sample/`: eval-0 clean fixture (6 stage reports + stage-log.json) + the real generated `execution-report.md`/`.json` — shows the flight-recorder deliverable honestly (it was produced by the actual aggregator).
+- `examples/build-report-sample/`: a clean-build fixture package (6 stage reports + stage-log.json) + the real generated `execution-report.md`/`.json` — shows the flight-recorder deliverable honestly (produced by the actual aggregator, regeneration reproducible).
 
 ## 8. CI / GitHub readiness
 
-- `ci.yml`: matrix {ubuntu, macos, windows} × node 18/20/22 → `node --test`; python 3.9/3.12 → `pytest skills/presentation-build-report/scripts` (with `PYTHONUTF8=1`). Markdown link check (lychee or a no-dep node script).
+- `ci.yml`: matrix {ubuntu, macos, windows} × node 18/20/22 → `node --test`; python 3.9/3.12 → `pytest skills/presentation-build-report/scripts` (with `PYTHONUTF8=1`).
 - `release.yml`: on tag `v*`: run CI, `npm pack`, attach tarball to GitHub Release draft, `npm publish` behind environment approval. Never auto-publishes.
 - Issue/PR templates, CODEOWNERS (@ahmedgeindy), branch = main.
 
 ## 9. Release checklist (RELEASE-CHECKLIST.md at repo root)
 
-Pre-push: all tests green (node + pytest), `npm pack --dry-run` file list reviewed, README quickstart executed verbatim on a clean machine/temp dir, LICENSE holder confirmed, npm name availability checked, repo URL set in package.json, CHANGELOG 1.0.0 dated, no workspace/eval artifacts leaked into tarball, secrets scan.
-Publish (human): create GitHub repo, push, tag v1.0.0, npm publish, verify `npx deckforge doctor` from registry.
-
-## 10. Delegation plan (build order)
-
-1. Controller: scaffold + copy skills (clean: no .git/.pytest_cache/__pycache__) + package.json + LICENSE + .gitignore. Commit.
-2. Parallel agents (disjoint paths, this spec as shared brief):
-   A. CLI: bin/ + src/ + test/ (largest task)
-   B. docs/: pipeline.md, skills-reference.md, confidence-rubric.md, cross-agent.md, faq.md (reads skills/ for ground truth)
-   C. examples/ (reuses eval-0 fixture + real report)
-   D. .github/ + community files (CONTRIBUTING, SECURITY, CODE_OF_CONDUCT, templates, workflows) + CHANGELOG + RELEASE-CHECKLIST
-3. Controller: README.md last (needs final CLI surface), integration verify (tests, npm pack dry-run, temp-dir install smoke on all 3 adapters, pytest), review pass, fix, commit series, RC report to user. STOP before any push/publish.
+Pre-push: all tests green (node + pytest), `npm pack --dry-run` file list reviewed, docs link sweep, README quickstart executed verbatim on a clean machine/temp dir, LICENSE holder confirmed, npm name availability checked, repo URL set in package.json, CHANGELOG 1.0.0 dated, no workspace/eval artifacts leaked into tarball, secrets scan.
+Publish (human): configure the `npm-publish` GitHub environment with required reviewers, create GitHub repo, push, tag v1.0.0, approve, verify `npx deckforge doctor` from registry.

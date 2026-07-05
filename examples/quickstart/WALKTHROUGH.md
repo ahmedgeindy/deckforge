@@ -1,16 +1,17 @@
 # Quickstart — build your first deck with DeckForge
 
 This walks through turning `brief.md` + `sources/` in this folder into a finished presentation,
-using DeckForge's six-stage pipeline. Expect ~10 minutes of your own time plus however long your
-agent takes to run the stages (the build-report-sample example shows a real run at ~15 minutes
-of agent time / ~238K tokens for a 12-slide deck — yours will vary).
+using DeckForge's seven-stage pipeline (six skills plus your own renderer). Expect ~10 minutes of
+your own time plus however long your agent takes to run the stages (the build-report-sample
+example shows what a finished run's telemetry looks like — fixture data of ~15 minutes of agent
+time / ~238K tokens for a 12-slide deck; yours will vary).
 
 **Read this first:** DeckForge does not render slides itself. It is a set of instruction skills
 (Markdown) that teach your coding agent a disciplined pipeline, plus one Python script that
 aggregates an internal build log at the end. Your agent — Claude Code, Codex, or OpenCode — does
 the actual thinking and writing at every stage, including the final render (it needs a rendering
 skill of its own, such as `document-skills:pptx`, or a project-specific deck renderer). If you
-skip installing a renderer, stages 1-4 and 6 still work; stage 5 (render) is on you to supply.
+skip installing a renderer, stages 1-4 and 6-7 still work; stage 5 (render) is on you to supply.
 
 ## 1. Install DeckForge
 
@@ -21,8 +22,8 @@ deckforge install
 
 `deckforge install` auto-detects which agents you have (Claude Code, Codex, OpenCode) and copies
 the six skills into each one's discovery location. Run `deckforge list` afterward to confirm
-what's installed where, or `deckforge doctor` to check Python is available for stage 6 (the
-build-report aggregator; the other five stages don't need Python).
+what's installed where, or `deckforge doctor` to check Python is available for stage 7 (the
+build-report aggregator; the other stages don't need Python).
 
 If you'd rather scope the install to just this project instead of your whole user account, add
 `--scope project` and re-run `deckforge install` from your project root.
@@ -55,7 +56,7 @@ and continue.
 |---|-------|-------|-------------------------------|
 | 1 | structure | `presentation-structure` | Reads `brief.md` + `sources/`, picks a narrative framework (this brief is a decision meeting, skeptical-on-ROI/aligned-on-mission — expect an answer-first pyramid), writes a slide-by-slide outline, runs 10 QA gates on it, and should ask you to approve the outline before continuing. |
 | 2 | design | `presentation-design` | Assigns each outlined slide a layout archetype, applies the design-token system, checks acceptance budgets (hero numbers per slide, dark-slide count, etc.). |
-| 3 | copywriting | `presentation-copywriting` | Writes the actual slide titles/body copy, tracing every number and quote back to `metrics-summary.md` / `customer-feedback-notes.md`. Runs an 18-check fact-fidelity gate — this is what stops it from inventing a stat neither source file contains. |
+| 3 | copywriting | `presentation-copywriting` | Writes the actual slide titles/body copy, tracing every number and quote back to `metrics-summary.md` / `customer-feedback-notes.md`. Runs a six-step fact-fidelity gate plus 18 copy-quality checks — this is what stops it from inventing a stat neither source file contains. |
 | 4 | diagram | `diagram-design` | Decides which slides need an actual diagram vs. a list/table (the escalation ladder) — for this brief, expect at most a small funnel or timeline, not one on every slide. |
 | 5 | render | *your renderer* | DeckForge doesn't ship this stage. Your agent hands the approved outline + copy to whatever rendering skill you have installed (e.g. `document-skills:pptx`) to produce the actual file. |
 | 6 | qa | `presentation-qa` | Fresh-eyes pass over the rendered deck: severity-tagged findings, a consistency sweep across slides, and a SHIP/BLOCKED verdict. |

@@ -8,15 +8,13 @@ Only for `presentation-build-report`'s aggregator. The other five skills (`prese
 
 `build_status` computes to `FAILED` when any one of three things is true: the QA verdict is `BLOCKED`, the render step errored (`render_errored: true` in `meta.json`), or the build is incomplete (a stage you declared in `expected_stages` never produced a stage-record). Check `build/execution-report.md` — it lists which of the three fired, and for an incomplete build, the specific `missing_stages`. See `docs/confidence-rubric.md` for the full decision table.
 
-## I got a `UnicodeDecodeError` running the build report on Windows
+## Why do the docs keep prefixing `PYTHONUTF8=1` on Windows?
 
-Run it with `PYTHONUTF8=1` set:
+It is a belt-and-suspenders encoding precaution, not a hard requirement. The shipped aggregator specifies `encoding="utf-8"` on every file operation and runs clean without the flag. But the report content is full of non-ASCII characters (em dashes, arrows), Windows consoles default to a `cp1252`-family encoding, and agents often write small auxiliary Python scripts around the pipeline that do *not* set encodings explicitly — the flag makes those safe too. It is harmless everywhere else, so the skills instruct agents to always include it:
 
 ```
 PYTHONUTF8=1 python -m scripts.build_report build/
 ```
-
-The report content includes non-ASCII characters (em dashes, arrows), and Windows consoles default to a `cp1252`-family encoding that chokes on them without the UTF-8 mode flag.
 
 ## Can I use just one skill, without running the whole pipeline?
 

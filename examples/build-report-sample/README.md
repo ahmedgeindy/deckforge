@@ -1,6 +1,6 @@
 # build-report-sample
 
-A worked example of the flight-recorder deliverable from stage 6 (`presentation-build-report`):
+A worked example of the flight-recorder deliverable from stage 7 (`presentation-build-report`):
 what a finished pipeline run looks like on disk, and the internal engineering build log the
 aggregator produces from it.
 
@@ -20,7 +20,7 @@ build-report-sample/
 │   │   ├── copywriting-fact-fidelity.md
 │   │   ├── diagram-report.md
 │   │   └── render-log.md
-│   ├── reports/qa-report.md             # stage 6 input: the presentation-qa verdict
+│   ├── reports/qa-report.md             # stage 6 (qa) verdict, input to stage 7
 │   └── stage-log.json                   # per-stage tokens/duration, captured during the run (see Step 1 of the skill)
 └── expected-output/                 # what scripts.build_report actually produced from package/
     ├── execution-report.md
@@ -31,7 +31,7 @@ build-report-sample/
         └── meta.json
 ```
 
-`package/` is the raw material a build-report run works from: the reports each upstream skill
+`package/` is the raw material a build-report run works from: the reports each upstream stage
 (structure, design, copywriting, diagram, render, qa) leaves behind, plus the telemetry log
 captured while the pipeline ran. `expected-output/` is downstream of that: the harvested
 `inputs/*.json` (produced by the "harvest each stage" step of the skill, `references/extraction-guide.md`)

@@ -103,45 +103,45 @@ A note on stage 1's own wording: `presentation-structure`'s `SKILL.md` (Step 6) 
         │
         ▼
  ┌───────────────────────┐
- │ 1 presentation-        │
- │   structure            │
+ │ 1 presentation-       │
+ │   structure           │
  └───────────────────────┘
         │  outline + fact bank  (immutable from here on)
         ▼
  ┌───────────────────────┐
- │ 2 presentation-        │
- │   design               │
+ │ 2 presentation-       │
+ │   design              │
  └───────────────────────┘
         │  + token sheet / deck map / composition spec
         ▼
  ┌───────────────────────┐
- │ 3 presentation-        │
- │   copywriting          │
+ │ 3 presentation-       │
+ │   copywriting         │
  └───────────────────────┘
         │  + locked per-slide copy
         ▼
  ┌───────────────────────┐
- │ 4 diagram-design        │
+ │ 4 diagram-design      │
  └───────────────────────┘
         │  + diagramSpec(s) (may be none) / demotion report
         ▼
  ┌───────────────────────┐
- │ 5 render                │   <- user's own renderer/deck system,
- │   (not a DeckForge      │      not a DeckForge skill
- │    skill)                │
+ │ 5 render              │   <- user's own renderer/deck system,
+ │   (not a DeckForge    │      not a DeckForge skill
+ │    skill)             │
  └───────────────────────┘
         │  rendered deck (pptx/html/pdf/png) + export internals
         ▼
  ┌───────────────────────┐
- │ 6 presentation-qa       │
+ │ 6 presentation-qa     │
  └───────────────────────┘
         │  QA report + verdict (SHIP / SHIP-WITH-ACCEPTED-MAJORS / BLOCKED)
         ▼
  ┌───────────────────────┐          each stage above also feeds:
- │ 7 presentation-build-  │◄───────  build/stage-log.json
- │   report (python)      │◄───────  build/inputs/stage-records.json
- │                         │◄───────  build/inputs/qa.json
- │                         │◄───────  build/inputs/meta.json
+ │ 7 presentation-build- │◄───────  build/stage-log.json
+ │   report (python)     │◄───────  build/inputs/stage-records.json
+ │                       │◄───────  build/inputs/qa.json
+ │                       │◄───────  build/inputs/meta.json
  └───────────────────────┘
         │
         ▼

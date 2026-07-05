@@ -8,6 +8,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import { listBundledSkills } from '../skills.js';
 
 export const MANIFEST_FILENAME = '.deckforge-manifest.json';
 
@@ -120,7 +121,17 @@ export function findConflicts(plannedFiles, previousManifest) {
  * skill), refusing (unless opts.force) if any destination file was
  * user-modified since the previous install.
  *
- * @returns {{ok:true, manifestFiles:object[], files:object[]}|{ok:false, conflicts:string[]}}
+ * Lifecycle bookkeeping against previousManifest:
+ * - `orphansRemoved`: files the previous manifest tracked for one of the
+ *   skills being (re)installed that the new bundle no longer contains.
+ *   They are deleted — otherwise they'd sit on disk untracked forever,
+ *   invisible to both future updates and uninstall. Dry-run reports them
+ *   without deleting.
+ * - `carriedFiles`: previous entries for skills NOT in this call (e.g. a
+ *   partial `update`). The caller must merge these into the new manifest,
+ *   or those skills would silently stop being tracked.
+ *
+ * @returns {{ok:true, manifestFiles:object[], carriedFiles:object[], orphansRemoved:string[], files:object[]}|{ok:false, conflicts:string[]}}
  */
 export function installSkillFiles({ targetRoot, skills, opts = {}, previousManifest }) {
   const files = [];
@@ -143,6 +154,16 @@ export function installSkillFiles({ targetRoot, skills, opts = {}, previousManif
   const conflicts = opts.force ? [] : findConflicts(conflictCandidates, previousManifest);
   if (conflicts.length > 0) return { ok: false, conflicts };
 
+  const installedNames = new Set(skills.map((s) => s.name));
+  const plannedPaths = new Set(files.map((f) => f.relPath));
+  const prevFiles = previousManifest?.files ?? [];
+  // `f.skill == null` is the AGENTS.md entry — owned by the managed-block
+  // machinery, never by skill-file bookkeeping.
+  const orphansRemoved = prevFiles
+    .filter((f) => f.skill != null && installedNames.has(f.skill) && !plannedPaths.has(f.path))
+    .map((f) => f.path);
+  const carriedFiles = prevFiles.filter((f) => f.skill != null && !installedNames.has(f.skill));
+
   const manifestFiles = [];
   for (const f of files) {
     if (!opts.dryRun) copyFile(f.srcPath, f.destPath);
@@ -153,7 +174,17 @@ export function installSkillFiles({ targetRoot, skills, opts = {}, previousManif
       sha256: sha256File(f.srcPath),
     });
   }
-  return { ok: true, manifestFiles, files };
+
+  if (!opts.dryRun) {
+    for (const rel of orphansRemoved) {
+      fs.rmSync(path.join(targetRoot, rel), { force: true });
+    }
+    for (const name of installedNames) {
+      pruneEmptyDirs(path.join(targetRoot, name));
+    }
+  }
+
+  return { ok: true, manifestFiles, carriedFiles, orphansRemoved, files };
 }
 
 /** Remove manifest-listed skill files (not the AGENTS.md entry) and prune the emptied skill dirs. */
@@ -353,7 +384,17 @@ export function makeManagedBlockAdapter({ id, agentLabel, invocationHelp, resolv
     const filesResult = installSkillFiles({ targetRoot: skillsRoot, skills, opts, previousManifest });
     if (!filesResult.ok) return { ok: false, conflicts: filesResult.conflicts, targetRoot: skillsRoot };
 
-    const blockBody = buildManagedBlockBody(skills, { agentLabel, skillsRootLabel });
+    // The block must describe ALL skills installed at this target after the
+    // operation — a partial `update` passes only the stale subset, and
+    // rebuilding the block from that subset alone would drop the other
+    // installed skills' pointers from AGENTS.md. Carried (untouched) skills
+    // are resolved against the bundle for their name/version/description.
+    const passedNames = new Set(skills.map((s) => s.name));
+    const carriedNames = new Set(filesResult.carriedFiles.map((f) => f.skill));
+    const carriedSkills = listBundledSkills().filter((s) => carriedNames.has(s.name) && !passedNames.has(s.name));
+    const blockSkills = [...skills, ...carriedSkills].sort((a, b) => a.name.localeCompare(b.name));
+
+    const blockBody = buildManagedBlockBody(blockSkills, { agentLabel, skillsRootLabel });
     const blockResult = installManagedBlock({ agentsMdPath, blockBody, agentId: id, opts, previousManifest });
     if (!blockResult.ok) return { ok: false, conflicts: blockResult.conflicts, targetRoot: skillsRoot };
 
@@ -363,7 +404,7 @@ export function makeManagedBlockAdapter({ id, agentLabel, invocationHelp, resolv
         installedAt: new Date().toISOString(),
         agentsMdPath,
         agentsMdCreated: blockResult.agentsMdCreated,
-        files: [...filesResult.manifestFiles, blockResult.manifestEntry],
+        files: [...filesResult.carriedFiles, ...filesResult.manifestFiles, blockResult.manifestEntry],
       });
     }
     return {
@@ -371,6 +412,7 @@ export function makeManagedBlockAdapter({ id, agentLabel, invocationHelp, resolv
       targetRoot: skillsRoot,
       agentsMdPath,
       files: filesResult.manifestFiles.map((f) => f.path),
+      orphansRemoved: filesResult.orphansRemoved,
     };
   }
 

@@ -2,12 +2,15 @@
 // bundled version is newer than what's currently installed for that
 // agent/scope. Skills not installed at all are left alone (that's what
 // `install` is for); skills already current or ahead are left alone too.
+// A skill that is BOTH behind the bundle AND locally modified is never
+// force-updated silently: it is reported as skipped with an explicit
+// "run install --force" pointer.
 
 import { getAdapter, AGENT_IDS } from '../adapters/index.js';
 import { parseArgs, defaultContext } from '../cli-helpers.js';
 import { scopeStatus } from '../skill-status.js';
 import { listBundledSkills } from '../skills.js';
-import { packageVersion } from '../version.js';
+import { packageVersion, compareVersions } from '../version.js';
 import { formatError, glyph } from '../ui.js';
 
 const HELP = `deckforge update — upgrade installed skills to the bundled versions
@@ -80,10 +83,33 @@ export async function run(args, ctx = defaultContext()) {
     // Check status within this exact scope (not "project shadows user"): we
     // are about to write to `values.scope` specifically, so that's the only
     // installed version that matters for deciding what's stale here.
-    const stale = skills.filter((skill) => scopeStatus(adapter, values.scope, skill, ctx.env).status === 'outdated');
+    //
+    // Staleness is a pure version comparison, independent of hash state:
+    // scopeStatus reports 'modified' (not 'outdated') whenever any file
+    // hash differs, so filtering on 'outdated' alone would silently skip
+    // skills that are both hand-edited AND behind the bundle.
+    const stale = [];
+    const skippedModified = [];
+    for (const skill of skills) {
+      const status = scopeStatus(adapter, values.scope, skill, ctx.env);
+      if (status.status === 'not-installed') continue;
+      if (compareVersions(status.installedVersion, skill.version) >= 0) continue;
+      if (status.status === 'modified') {
+        skippedModified.push({ skill, installedVersion: status.installedVersion });
+      } else {
+        stale.push(skill);
+      }
+    }
+
+    for (const s of skippedModified) {
+      ctx.stdout(
+        `${glyph('warn')} ${id} (${values.scope}): skipped ${s.skill.name}: locally modified ` +
+          `(installed ${s.installedVersion} < bundled ${s.skill.version}) — run install --force to update\n`
+      );
+    }
 
     if (stale.length === 0) {
-      ctx.stdout(`${id} (${values.scope}): nothing to update\n`);
+      if (skippedModified.length === 0) ctx.stdout(`${id} (${values.scope}): nothing to update\n`);
       continue;
     }
 
@@ -95,6 +121,10 @@ export async function run(args, ctx = defaultContext()) {
     }
     const label = values['dry-run'] ? 'would update' : 'updated';
     ctx.stdout(`${glyph('ok')} ${id} (${values.scope}): ${label} ${stale.map((s) => s.name).join(', ')}\n`);
+    if (result.orphansRemoved?.length > 0) {
+      const verb = values['dry-run'] ? 'would remove' : 'removed';
+      ctx.stdout(`  ${verb} ${result.orphansRemoved.length} orphaned file(s): ${result.orphansRemoved.join(', ')}\n`);
+    }
   }
 
   return 0;

@@ -18,6 +18,7 @@ Per `docs/release-spec.md` §9. Two phases: everything an agent can verify befor
 
 - [ ] Create the GitHub repository
 - [ ] Push `main`
+- [ ] **Create the `npm-publish` GitHub environment with required reviewers** (Settings → Environments → New environment → add yourself as required reviewer) and add the `NPM_TOKEN` secret to that environment. Without this, GitHub auto-creates the environment with NO protection rules and pushing a tag would publish with zero approval.
 - [ ] Tag `v1.0.0` and push the tag (triggers `.github/workflows/release.yml`)
 - [ ] Approve the `npm-publish` environment gate on the release run (this is the only step that actually publishes to npm)
 - [ ] Verify `npx deckforge@latest doctor` works from the published registry package

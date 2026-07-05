@@ -138,3 +138,37 @@ test('claude.install --dry-run reports the plan without writing any files', () =
     fs.rmSync(skillsSrc, { recursive: true, force: true });
   });
 });
+
+test('reinstall deletes files the new bundle no longer contains, untracks them, and prunes emptied dirs', () => {
+  withEnv((env) => {
+    const skillsSrc = makeTempDir('claude-src-');
+    const skillA = makeFakeSkill(skillsSrc, { name: 'alpha-skill' });
+    claude.install([skillA], 'user', {}, env);
+
+    // The new bundle no longer ships references/notes.md.
+    fs.rmSync(path.join(skillA.dir, 'references', 'notes.md'));
+
+    const skillsRoot = path.join(env.homeDir, '.claude', 'skills');
+    const orphanOnDisk = path.join(skillsRoot, 'alpha-skill', 'references', 'notes.md');
+
+    // Dry-run: reports the planned orphan deletion but deletes nothing.
+    const dry = claude.install([skillA], 'user', { dryRun: true }, env);
+    assert.deepEqual(dry.orphansRemoved, ['alpha-skill/references/notes.md']);
+    assert.ok(fs.existsSync(orphanOnDisk), 'dry-run must not delete the orphan');
+
+    // Real install: orphan deleted, manifest no longer lists it, dir pruned.
+    const result = claude.install([skillA], 'user', {}, env);
+    assert.deepEqual(result.orphansRemoved, ['alpha-skill/references/notes.md']);
+    assert.ok(!fs.existsSync(orphanOnDisk), 'orphan must be deleted');
+    assert.ok(!fs.existsSync(path.dirname(orphanOnDisk)), 'emptied references/ dir must be pruned');
+
+    const manifest = readManifest(skillsRoot);
+    assert.ok(!manifest.files.some((f) => f.path === 'alpha-skill/references/notes.md'), 'manifest must not list the orphan');
+
+    // Round-trip: uninstall leaves nothing of the skill behind.
+    claude.uninstall('user', {}, env);
+    assert.ok(!fs.existsSync(path.join(skillsRoot, 'alpha-skill')), 'uninstall must leave nothing');
+
+    fs.rmSync(skillsSrc, { recursive: true, force: true });
+  });
+});

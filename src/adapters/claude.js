@@ -54,10 +54,17 @@ export function install(skills, scope, opts = {}, env = {}) {
     writeManifest(skillsRoot, {
       version: opts.cliVersion ?? '0.0.0',
       installedAt: new Date().toISOString(),
-      files: result.manifestFiles,
+      // carriedFiles: entries for skills untouched by this (possibly
+      // partial) install — dropping them would untrack those skills.
+      files: [...result.carriedFiles, ...result.manifestFiles],
     });
   }
-  return { ok: true, targetRoot: skillsRoot, files: result.manifestFiles.map((f) => f.path) };
+  return {
+    ok: true,
+    targetRoot: skillsRoot,
+    files: result.manifestFiles.map((f) => f.path),
+    orphansRemoved: result.orphansRemoved,
+  };
 }
 
 export function uninstall(scope, opts = {}, env = {}) {

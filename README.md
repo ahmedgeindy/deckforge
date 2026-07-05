@@ -6,22 +6,24 @@ DeckForge governs *what goes on the slides and whether it's true*. Your agent (a
 
 ```
 brief + sources
-      │
-      ▼
-┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
-│ 1. structure │──▶│ 2. design    │──▶│ 3. copywriting│──▶│ 4. diagrams  │
-│ outline +    │   │ tokens +     │   │ titles, body, │   │ escalation   │
-│ fact bank    │   │ archetypes   │   │ fact fidelity │   │ ladder, specs│
-└──────────────┘   └──────────────┘   └──────────────┘   └──────────────┘
-                                                                 │
-      ┌──────────────────────────────────────────────────────────┘
-      ▼
-┌──────────────┐   ┌──────────────┐   ┌───────────────────────────┐
-│ 5. render    │──▶│ 6. qa        │──▶│ 7. build report           │
-│ your deck    │   │ SHIP/BLOCKED │   │ confidence, telemetry,    │
-│ system       │   │ verdict      │   │ PASS/FAILED — internal log│
-└──────────────┘   └──────────────┘   └───────────────────────────┘
+        │
+        ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│ 1 structure   │──▶│ 2 design      │──▶│ 3 copywriting │──▶│ 4 diagrams    │
+│ outline +     │   │ tokens +      │   │ titles, body, │   │ escalation    │
+│ fact bank     │   │ archetypes    │   │ fact fidelity │   │ ladder, specs │
+└───────────────┘   └───────────────┘   └───────────────┘   └───────────────┘
+                                                                    │
+        ┌───────────────────────────────────────────────────────────┘
+        ▼
+┌───────────────┐   ┌───────────────┐   ┌─────────────────────────────┐
+│ 5 render      │──▶│ 6 qa          │──▶│ 7 build report              │
+│ your deck     │   │ SHIP/BLOCKED  │   │ confidence, telemetry,      │
+│ system        │   │ verdict       │   │ PASS/FAILED — internal log  │
+└───────────────┘   └───────────────┘   └─────────────────────────────┘
 ```
+
+Seven pipeline stages; six are DeckForge skills — stage 5 (render) is your own deck system.
 
 ## Quickstart
 
@@ -41,14 +43,16 @@ Artifacts land in `build/` as the stages run; the final `build/execution-report.
 
 ## The six skills
 
-| # | Skill | What it enforces |
+| Stage | Skill | What it enforces |
 |---|-------|------------------|
 | 1 | `presentation-structure` | Narrative outline from story frameworks; every claim traced to a fact bank; kill-filter cuts slides that don't earn their place |
 | 2 | `presentation-design` | Design tokens, 11 slide archetypes, evidence craft, 26 AI-tell checks |
-| 3 | `presentation-copywriting` | Title/body craft by register; an 18-check fact-fidelity gate; escalates instead of inventing |
+| 3 | `presentation-copywriting` | Title/body craft by register; a six-step fact-fidelity gate plus 18 copy-quality checks; escalates instead of inventing |
 | 4 | `diagram-design` | Escalation ladder (prose → list → table → diagram); every edge verb-labeled and provenanced; demotion is legal and always reported |
-| 5 | `presentation-qa` | Check catalog, consistency sweeps, accessibility annex; computes a `SHIP` / `SHIP-WITH-ACCEPTED-MAJORS` / `BLOCKED` verdict from pre-agreed gates |
-| 6 | `presentation-build-report` | Internal build log: per-stage + weighted-overall + weakest-stage confidence, telemetry, source coverage, prioritized recommendations. Deterministic Python aggregator — never part of the deliverable |
+| 6 | `presentation-qa` | Check catalog, consistency sweeps, accessibility annex; computes a `SHIP` / `SHIP-WITH-ACCEPTED-MAJORS` / `BLOCKED` verdict from pre-agreed gates |
+| 7 | `presentation-build-report` | Internal build log: per-stage + weighted-overall + weakest-stage confidence, telemetry, source coverage, prioritized recommendations. Deterministic Python aggregator — never part of the deliverable |
+
+(Stage 5, render, is your deck system — HTML, PPTX, anything your agent can drive.)
 
 Skills are Markdown instruction sets (progressive disclosure: a short `SKILL.md`, detailed `references/`). Only the build report ships code — a stdlib-only Python 3 module with its own test suite. Details: [`docs/skills-reference.md`](docs/skills-reference.md).
 

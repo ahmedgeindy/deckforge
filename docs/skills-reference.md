@@ -158,5 +158,5 @@ PYTHONUTF8=1 python -m scripts.build_report <build_dir>
 - **Inputs read from `<build_dir>`:** `inputs/stage-records.json`, `inputs/qa.json`, `inputs/meta.json`, and `stage-log.json` (a sibling of `inputs/`, not inside it).
 - **Outputs written to `<build_dir>`:** `execution-report.md` and `execution-report.json`.
 - **Exit codes:** `0` if the computed `build_status` is `PASS` or `PASS WITH WARNINGS`; `2` if it is `FAILED`; `1` if the CLI is called with no `<build_dir>` argument at all.
-- `PYTHONUTF8=1` is required on Windows to avoid a `UnicodeDecodeError` when the report content includes non-ASCII characters (em dashes, arrows) under the default `cp1252` console encoding.
+- `PYTHONUTF8=1` is a recommended Windows-encoding precaution, not a hard requirement: the shipped scripts specify `encoding="utf-8"` on every file operation and run clean without it. The skills still instruct agents to set it so any auxiliary Python written around the pipeline inherits safe defaults under `cp1252` consoles (harmless everywhere else).
 - Missing `inputs/qa.json` defaults to a clean-build baseline (`verdict: SHIP`, zero findings); missing `inputs/meta.json` defaults to `render_errored: false` with no `expected_stages` check. Neither default should be relied on in practice — always write real `qa.json` and `meta.json` files.

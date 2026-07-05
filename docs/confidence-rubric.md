@@ -91,7 +91,7 @@ One smoothed headline number answers "is this build broadly healthy?"; one named
 
 ## Build status decision table
 
-`build_status` is computed from six inputs: the QA verdict, `render_errored`, `all_stages_complete`, `rendering_warnings`, `needs_verification`, `conflicts`, and which stages (if any) landed in the Low band. The QA verdict is normalized first (uppercased, non-letters stripped), so `"ship with accepted majors"`, `"SHIP-WITH-ACCEPTED-MAJORS"`, and `"Ship_With_Accepted_Majors"` all read identically.
+`build_status` is computed from seven inputs: the QA verdict, `render_errored`, `all_stages_complete`, `rendering_warnings`, `needs_verification`, `conflicts`, and which stages (if any) landed in the Low band. The QA verdict is normalized first (uppercased, non-letters stripped), so `"ship with accepted majors"`, `"SHIP-WITH-ACCEPTED-MAJORS"`, and `"Ship_With_Accepted_Majors"` all read identically.
 
 Rows are checked top-to-bottom and are exclusive:
 

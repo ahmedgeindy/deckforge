@@ -69,10 +69,7 @@
 - BeSpoke Coaching, "Seven Story Techniques" (seed article); Presentation Guru — Hook-Meat-Payoff; Future Present — in medias res
 - Garr Reynolds, *Presentation Zen* — garrreynolds.com
 
-### Local assets (integration layer — paths verbatim)
-- `C:\Users\AG-Dev\.claude\plugins\cache\anthropic-agent-skills\document-skills\9d2f1ae18723\skills\pptx\SKILL.md` (+ `editing.md`, `pptxgenjs.md`)
-- `C:\Users\AG-Dev\.claude\plugins\cache\hivecfm-workspace\hivecfm-workspace\0.1.0\skills\hive-deck-builder\SKILL.md`
-- `F:\ISt\XCAI\XCAI-Deck\DESIGN-SPEC.md`, `CRAFTSMANSHIP-AUDIT.md`, `README.md`, `BUILD-PLAN.md`, `qa\` (acceptance-matrix pattern)
-- `C:\Users\AG-Dev\.claude\projects\F--ISt-XCAI\memory\xcai-deck-build.md`
-- `C:\Users\AG-Dev\.claude\skills\` — 10 skills scanned, none presentation-related (no collision)
+### Local assets (integration layer)
+- Anthropic document-skills `pptx` skill (SKILL.md + editing.md + pptxgenjs.md) — rendering-layer contract this skill hands off to
+- An in-house deck-builder skill and a prior deck project's design spec, craftsmanship audit, and QA acceptance-matrix pattern — surveyed during research to avoid scope collision; paths withheld (private workspaces)
 

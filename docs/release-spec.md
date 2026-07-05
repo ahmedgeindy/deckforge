@@ -101,7 +101,7 @@ README.md is the front door: what/why (2 paragraphs + pipeline diagram), 60-seco
 
 ## 7. Examples
 
-- `examples/quickstart/`: `brief.md` (realistic product-review brief), `sources/` (2 small fake source docs), `EXPECTED.md` (what the pipeline produces at each stage, with the actual stage artifacts trimmed).
+- `examples/quickstart/`: `brief.md` (realistic product-review brief), `sources/` (2 small fake source docs), `WALKTHROUGH.md` (install → prompt → stage-by-stage expectations → how to read the execution report).
 - `examples/build-report-sample/`: eval-0 clean fixture (6 stage reports + stage-log.json) + the real generated `execution-report.md`/`.json` — shows the flight-recorder deliverable honestly (it was produced by the actual aggregator).
 
 ## 8. CI / GitHub readiness

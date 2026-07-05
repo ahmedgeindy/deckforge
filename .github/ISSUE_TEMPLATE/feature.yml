@@ -1,0 +1,35 @@
+name: Feature request
+description: Suggest an improvement to a DeckForge skill, the installer CLI, or docs.
+title: "[feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do? What's missing, awkward, or wrong today?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What would you like to happen?
+    validations:
+      required: true
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Which pipeline stage does this concern?
+      options:
+        - presentation-structure
+        - presentation-design
+        - presentation-copywriting
+        - diagram-design
+        - presentation-qa
+        - presentation-build-report
+        - installer CLI
+        - docs
+        - other
+    validations:
+      required: true

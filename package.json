@@ -1,5 +1,5 @@
 {
-  "name": "deckforge",
+  "name": "deckforge-cli",
   "version": "1.0.0",
   "description": "Agent-agnostic presentation pipeline: six staged skills (structure, design, copywriting, diagrams, QA, build report) for Claude Code, Codex, and OpenCode, with an installer CLI.",
   "keywords": [

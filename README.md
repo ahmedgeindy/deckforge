@@ -28,12 +28,14 @@ Seven pipeline stages; six are DeckForge skills — stage 5 (render) is your own
 ## Quickstart
 
 ```bash
-npm install -g deckforge
+npm install -g deckforge-cli
 
 deckforge install          # copies skills into your detected agent(s)
 deckforge init my-deck     # scaffolds brief.md, sources/, build/
 cd my-deck
 ```
+
+(The npm package is `deckforge-cli` — the unsuffixed name was already taken by an unrelated project — but the command it installs is plain `deckforge`.)
 
 Then open your agent in that directory and ask:
 

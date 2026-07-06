@@ -22,7 +22,7 @@ Skills are Markdown instruction sets (progressive disclosure: SKILL.md + referen
 
 ## 2. Locked decisions (defaults chosen for RC; flag at review)
 
-- **Name:** DeckForge. npm package **`deckforge`** (bin: `deckforge`). Fallback if name taken at publish time: `deckforge-cli` (checklist item — verify with `npm view deckforge` before publish).
+- **Name:** DeckForge. npm package **`deckforge-cli`** (bin: `deckforge`). The unsuffixed `deckforge` name was already taken on npm at publish time (an unrelated HTML→PPTX project), so the documented fallback took effect; the installed command is still plain `deckforge`.
 - **License:** MIT. Copyright holder: Ahmed Geindy.
 - **Version:** 1.0.0 everywhere (package.json, each SKILL.md `version:` frontmatter already 1.0.0, CHANGELOG).
 - **Repo layout:** single npm package (NOT a workspaces monorepo for v1 — the only runtime artifacts are markdown skills + one Python module + a thin installer CLI; a monorepo adds ceremony with zero payoff until a JS core exists). Revisit at v2 if a renderer/core package materializes.
@@ -97,7 +97,7 @@ Managed-block edits never touch content outside markers; if AGENTS.md is missing
 
 ## 6. Documentation set
 
-README.md is the front door: what/why (2 paragraphs + pipeline diagram), 60-second quickstart (`npm i -g deckforge && deckforge install && deckforge init my-deck`), skill table, agent-compat matrix, example output screenshot-as-markdown, links into docs/. Everything else lives in docs/ (§3 list). Tone: engineering-grade, zero hype — the copywriting skill's own anti-hype rules apply to our README.
+README.md is the front door: what/why (2 paragraphs + pipeline diagram), 60-second quickstart (`npm i -g deckforge-cli && deckforge install && deckforge init my-deck`), skill table, agent-compat matrix, example output screenshot-as-markdown, links into docs/. Everything else lives in docs/ (§3 list). Tone: engineering-grade, zero hype — the copywriting skill's own anti-hype rules apply to our README.
 
 ## 7. Examples
 
@@ -113,4 +113,4 @@ README.md is the front door: what/why (2 paragraphs + pipeline diagram), 60-seco
 ## 9. Release checklist (RELEASE-CHECKLIST.md at repo root)
 
 Pre-push: all tests green (node + pytest), `npm pack --dry-run` file list reviewed, docs link sweep, README quickstart executed verbatim on a clean machine/temp dir, LICENSE holder confirmed, npm name availability checked, repo URL set in package.json, CHANGELOG 1.0.0 dated, no workspace/eval artifacts leaked into tarball, secrets scan.
-Publish (human): configure the `npm-publish` GitHub environment with required reviewers, create GitHub repo, push, tag v1.0.0, approve, verify `npx deckforge doctor` from registry.
+Publish (human): configure the `npm-publish` GitHub environment with required reviewers, create GitHub repo, push, tag v1.0.0, approve, verify `npx deckforge-cli doctor` from registry.

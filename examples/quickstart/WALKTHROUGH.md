@@ -16,7 +16,7 @@ skip installing a renderer, stages 1-4 and 6-7 still work; stage 5 (render) is o
 ## 1. Install DeckForge
 
 ```bash
-npm i -g deckforge
+npm i -g deckforge-cli
 deckforge install
 ```
 

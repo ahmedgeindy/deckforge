@@ -43,6 +43,36 @@ Then open your agent in that directory and ask:
 
 Artifacts land in `build/` as the stages run; the final `build/execution-report.md` tells you whether the deck is fit to ship and what to fix if it isn't. Full walkthrough: [`examples/quickstart/WALKTHROUGH.md`](examples/quickstart/WALKTHROUGH.md).
 
+## Just ask — no skill names needed
+
+You never have to mention DeckForge or any skill by name. The skills are written to trigger on ordinary presentation requests; your agent walks the pipeline on its own. Real prompts that work:
+
+```text
+Build me a presentation from brief.md and the files in sources/.
+```
+
+```text
+Turn these three docs into a 10-slide deck for our exec team.
+It's a budget-renewal decision meeting and they're skeptical about ROI.
+```
+
+```text
+Make an investor-update deck from this quarter's metrics.
+Show me the outline for approval before you design anything.
+```
+
+```text
+QA this deck before I send it to the board.
+```
+
+```text
+This slide is a wall of bullets — should it be a diagram?
+```
+
+What you get without asking: the agent proposes an outline and waits for your approval, traces every number to your source files (and flags what it can't source instead of inventing it), renders through your deck system, runs a fresh-eyes QA pass, and drops an engineering build log in `build/` with a PASS / PASS WITH WARNINGS / FAILED verdict. If something you expected is missing from the deck, check the report's "Skipped by design" section — every cut has a stated reason.
+
+Two habits that get better decks: say **who the audience is and what decision you want from them** (it drives the entire narrative structure), and point at **real source files** (the pipeline refuses to invent facts, so it can only be as good as what you feed it).
+
 ## The six skills
 
 | Stage | Skill | What it enforces |

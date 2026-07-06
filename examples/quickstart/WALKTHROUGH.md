@@ -45,8 +45,18 @@ Prompt it plainly, e.g.:
 
 > Build me a presentation from brief.md — follow the DeckForge pipeline.
 
+Or even without naming DeckForge at all — any of these trigger the same pipeline:
+
+> Build me a presentation from brief.md and the files in sources/.
+
+> Turn brief.md into an exec deck. Decision meeting, skeptical-on-ROI audience — show me the
+> outline before designing anything.
+
+> Make a quarterly review deck from these sources. Keep it under 12 slides.
+
 You don't need to name each skill — the pipeline skills are written to trigger on this kind of
-request. If your agent asks clarifying questions the brief didn't answer, that's the structure
+request. Naming the audience and the decision you want from them is far more valuable than any
+magic words: it drives the narrative structure the pipeline picks. If your agent asks clarifying questions the brief didn't answer, that's the structure
 stage's intake step working as intended (see Step 0 of `presentation-structure`) — answer them
 and continue.
 

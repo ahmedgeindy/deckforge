@@ -13,7 +13,7 @@ Only for `presentation-build-report`'s aggregator. The other five skills (`prese
 It is a belt-and-suspenders encoding precaution, not a hard requirement. The shipped aggregator specifies `encoding="utf-8"` on every file operation and runs clean without the flag. But the report content is full of non-ASCII characters (em dashes, arrows), Windows consoles default to a `cp1252`-family encoding, and agents often write small auxiliary Python scripts around the pipeline that do *not* set encodings explicitly — the flag makes those safe too. It is harmless everywhere else, so the skills instruct agents to always include it:
 
 ```
-PYTHONUTF8=1 python -m scripts.build_report build/
+PYTHONUTF8=1 python "<skill dir>/scripts/build_report.py" build/
 ```
 
 ## Can I use just one skill, without running the whole pipeline?

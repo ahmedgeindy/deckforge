@@ -149,14 +149,16 @@ All six skills are Markdown instruction sets (a `SKILL.md` plus a `references/` 
 
 ### CLI
 
-Run from the skill directory (`skills/presentation-build-report/`):
+Run from any directory, pointing at the script inside the skill folder:
 
 ```
-PYTHONUTF8=1 python -m scripts.build_report <build_dir>
+PYTHONUTF8=1 python <skill dir>/scripts/build_report.py <build_dir>
 ```
+
+`python -m scripts.build_report <build_dir>` also works when the current directory is the skill directory (`skills/presentation-build-report/`).
 
 - **Inputs read from `<build_dir>`:** `inputs/stage-records.json`, `inputs/qa.json`, `inputs/meta.json`, and `stage-log.json` (a sibling of `inputs/`, not inside it).
 - **Outputs written to `<build_dir>`:** `execution-report.md` and `execution-report.json`.
-- **Exit codes:** `0` if the computed `build_status` is `PASS` or `PASS WITH WARNINGS`; `2` if it is `FAILED`; `1` if the CLI is called with no `<build_dir>` argument at all.
+- **Exit codes:** `0` if the computed `build_status` is `PASS` or `PASS WITH WARNINGS`; `2` if it is `FAILED`; `1` if the CLI is called with no `<build_dir>` argument, the build directory does not exist, or an input file is malformed (one `ERROR:` line names the file, record and field; nothing is written).
 - `PYTHONUTF8=1` is a recommended Windows-encoding precaution, not a hard requirement: the shipped scripts specify `encoding="utf-8"` on every file operation and run clean without it. The skills still instruct agents to set it so any auxiliary Python written around the pipeline inherits safe defaults under `cp1252` consoles (harmless everywhere else).
 - Missing `inputs/qa.json` defaults to a clean-build baseline (`verdict: SHIP`, zero findings); missing `inputs/meta.json` defaults to `render_errored: false` with no `expected_stages` check. Neither default should be relied on in practice — always write real `qa.json` and `meta.json` files.

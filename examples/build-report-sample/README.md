@@ -63,8 +63,7 @@ cp examples/build-report-sample/expected-output/inputs/qa.json           /tmp/de
 cp examples/build-report-sample/expected-output/inputs/meta.json         /tmp/deckforge-build/inputs/
 cp examples/build-report-sample/package/stage-log.json                   /tmp/deckforge-build/
 
-cd skills/presentation-build-report
-PYTHONUTF8=1 python -m scripts.build_report /tmp/deckforge-build
+PYTHONUTF8=1 python skills/presentation-build-report/scripts/build_report.py /tmp/deckforge-build
 # writes /tmp/deckforge-build/execution-report.md and execution-report.json
 ```
 

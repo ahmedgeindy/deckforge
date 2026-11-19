@@ -16,13 +16,53 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      published: ${{ steps.registry.outputs.published }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Tag must match the version in package.json
+        # A tag that disagrees with package.json would publish a version nobody tagged.
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG="$(node -p "require('./package.json').version")"
+          echo "tag=$TAG  package.json=$PKG"
+          if [ "$TAG" != "$PKG" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $PKG"
+            exit 1
+          fi
+
+      - name: Is this version already on npm?
+        # Makes a re-run safe. npm refuses to publish over an existing version, and that
+        # refusal also makes `npm publish --dry-run` fail, so both the dry run below and the
+        # publish job are skipped when the version is already there.
+        # A 404 means "not published"; any other failure stops the run rather than guessing.
+        id: registry
+        run: |
+          NAME="$(node -p "require('./package.json').name")"
+          VERSION="$(node -p "require('./package.json').version")"
+          set +e
+          OUT="$(npm view "$NAME@$VERSION" version 2>&1)"
+          RC=$?
+          set -e
+          if [ "$RC" -eq 0 ] && [ "$OUT" = "$VERSION" ]; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::$NAME@$VERSION is already on npm. Skipping the dry run and the publish job."
+          elif echo "$OUT" | grep -q "E404"; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            echo "$NAME@$VERSION is not on npm yet."
+          else
+            echo "::error::Could not tell whether $NAME@$VERSION is on npm (exit $RC):"
+            echo "$OUT"
+            exit 1
+          fi
+
       - run: npm pack
       - name: Verify publishability (dry run)
+        if: steps.registry.outputs.published != 'true'
         run: npm publish ./*.tgz --dry-run
       - uses: actions/upload-artifact@v4
         with:
@@ -37,6 +77,8 @@ jobs:
   publish:
     name: npm publish (manual approval)
     needs: pack
+    # Nothing to do when this version is already on npm (see the registry check in `pack`).
+    if: needs.pack.outputs.published != 'true'
     runs-on: ubuntu-latest
     environment: npm-publish
     permissions:
@@ -51,6 +93,18 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: deckforge-tarball
+      - name: NPM_TOKEN must be configured
+        # With no secret, `npm publish` fails with a generic authentication error. Say what is
+        # actually missing. (A secret named NPM_TOKEN, on the repository or on the
+        # npm-publish environment, holding an npm automation or granular publish token.)
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "::error::The NPM_TOKEN secret is not set (repository or npm-publish environment), so nothing can be published."
+            exit 1
+          fi
+
       - run: npm publish *.tgz --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

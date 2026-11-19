@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **presentation-build-report** — the CLI now validates `stage-records.json`, `qa.json`, `meta.json` and `stage-log.json` before computing anything. A malformed input prints one `ERROR:` line naming the file, record and field, writes no report, and exits 1, instead of a Python traceback. An unrecognised QA verdict (for example a typo of `BLOCKED`) is now an error rather than being treated as not blocked. A UTF-8 BOM in the JSON files is accepted.
+- **presentation-build-report** — `python <skill dir>/scripts/build_report.py <build_dir>` now works from any working directory. `python -m scripts.build_report` from the skill directory still works.
+
 ## [1.0.0] - 2026-07-06
 
 Initial release.

@@ -31,6 +31,14 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         python: ["3.9", "3.12"]
+        exclude:
+          # setup-python has no Python 3.9 build for the current ubuntu-latest image
+          # ("version 3.9 ... was not found for Ubuntu 26.04"), so 3.9 runs on 22.04.
+          - os: ubuntu-latest
+            python: "3.9"
+        include:
+          - os: ubuntu-22.04
+            python: "3.9"
     env:
       PYTHONUTF8: "1"
     steps:
